@@ -5,10 +5,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/DashBoard';
 import PrivateRoute from './components/PrivateRoute';
+import CreateShipment from './pages/CreateShipment';
+import Shipments from './pages/shipments';
 
 function App() {
   return (
-<BrowserRouter>
+    <BrowserRouter>
 
       <AuthProvider>
         <Routes>
@@ -22,7 +24,30 @@ function App() {
               </PrivateRoute>
             }
           />
-          
+          <Route
+            path="/create-shipment"
+            element={
+              <PrivateRoute>
+                <CreateShipment />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/shipments"
+            element={
+              <PrivateRoute>
+                <Shipments />
+              </PrivateRoute>
+            }
+          />
+          <Route
+  path="/admin"
+  element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  }
+/>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
