@@ -5,8 +5,8 @@ import { ADMIN_EMAILS } from '../constants/admins';
 const AdminRoute = ({ children }) => {
   const { currentUser } = useAuth();
 
-  if (!currentUser) return <Navigate to="/login" />;
-  if (!ADMIN_EMAILS.includes(currentUser.email)) return <Navigate to="/dashboard" />;
+  if (!currentUser) return <Navigate to="/admin-login" />;
+  if (!ADMIN_EMAILS.includes(currentUser.email)) return <Navigate to="/login" />;
 
   return children;
 };

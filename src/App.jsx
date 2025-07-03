@@ -7,6 +7,9 @@ import Dashboard from './pages/DashBoard';
 import PrivateRoute from './components/PrivateRoute';
 import CreateShipment from './pages/CreateShipment';
 import Shipments from './pages/shipments';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
@@ -17,7 +20,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <PrivateRoute>
                 <Dashboard />
@@ -40,8 +43,10 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-  path="/admin"
+
+<Route path="/admin-login" element={<AdminLogin />} />
+<Route
+  path="/admin-dashboard"
   element={
     <AdminRoute>
       <AdminDashboard />
