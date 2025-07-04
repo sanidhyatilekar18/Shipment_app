@@ -10,54 +10,63 @@ import Shipments from './pages/shipments';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
+import TrackShipment from './pages/TrackShipment';
+import { ToastContainer } from 'react-toastify';
+
+
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
 
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/create-shipment"
-            element={
-              <PrivateRoute>
-                <CreateShipment />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/shipments"
-            element={
-              <PrivateRoute>
-                <Shipments />
-              </PrivateRoute>
-            }
-          />
+      <BrowserRouter>
 
-<Route path="/admin-login" element={<AdminLogin />} />
-<Route
-  path="/admin-dashboard"
-  element={
-    <AdminRoute>
-      <AdminDashboard />
-    </AdminRoute>
-  }
-/>
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/create-shipment"
+              element={
+                <PrivateRoute>
+                  <CreateShipment />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/shipments"
+              element={
+                <PrivateRoute>
+                  <Shipments />
+                </PrivateRoute>
+              }
+            />
 
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route
+              path="/admin-dashboard"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route path="/shipment/:id" element={<TrackShipment />} />
 
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+
+      <ToastContainer />
+    </>
   )
 }
 

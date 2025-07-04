@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Make sure this is imported
+import { useNavigate } from 'react-router-dom'; 
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { db } from '../config/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { serverTimestamp } from 'firebase/firestore';
+import emailjs from '@emailjs/browser';
+
 function CreateShipment() {
     const [sender, setSender] = useState('');
     const [receiver, setReceiver] = useState('');
@@ -12,18 +16,46 @@ function CreateShipment() {
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
     const { currentUser } = useAuth();
-    const navigate = useNavigate(); // Initialize useNavigate here
+    const [otp, setOtp] = useState('');
+    const [generatedOtp, setGeneratedOtp] = useState('');
+    const [otpSent, setOtpSent] = useState(false);
+    const [verifying, setVerifying] = useState(false);
 
+    const navigate = useNavigate();
+    const generateAndSendOtp = () => {
+        const randomOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        setGeneratedOtp(randomOtp);
+
+        const templateParams = {
+            otp: randomOtp,
+            to_email: currentUser.email,
+        };
+
+        emailjs.send('service_s554lnl', 'template_uwdiwtt', templateParams, 'VctrwKFlDNjdmVapy')
+            .then(() => {
+                toast.success('OTP sent to your email');
+                setOtpSent(true);
+                            setVerifying(true);
+            })
+            .catch((error) => {
+                console.error('Failed to send OTP:', error);
+                toast.error('Failed to send OTP');
+            });
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Clear any previous error before validation and submission attempt
-        setError(''); 
+        setError('');
 
         if (!sender || !receiver || !packageSize || !address || !phone) {
             setError('Please fill in all fields');
             return;
         }
 
+       
+        if (otp !== generatedOtp) {
+            setError('Invalid OTP. Please check your email and try again.');
+            return;
+        }
         try {
             await addDoc(collection(db, 'shipments'), {
                 sender,
@@ -36,21 +68,22 @@ function CreateShipment() {
                 userId: currentUser.uid,
             });
 
-            // On successful addition, clear the form and navigate
+            toast.success('Shipment created successfully!');
             setSender('');
             setReceiver('');
             setPackageSize('');
             setAddress('');
             setPhone('');
-            // No need to setError('') here again as we cleared it at the beginning
-            // and are navigating away immediately.
 
-            navigate('/dashboard'); // This will redirect the user immediately
+
+            navigate('/shipments');
         } catch (error) {
-            console.error("Error creating shipment:", error); // Log the actual error for debugging
-            setError('Failed to create shipment. Please try again.'); // More user-friendly message
+            console.error("Error creating shipment:", error);
+            setError('Failed to create shipment. Please try again.');
         }
     };
+
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -98,6 +131,25 @@ function CreateShipment() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
+                    {verifying && (
+                        <input
+                            type="text"
+                            placeholder="Enter OTP"
+                            className="w-full p-2 border rounded"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                        />
+                    )}
+                    {!otpSent && (
+                        <button
+                            type="button"
+                            onClick={generateAndSendOtp}
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        >
+                            Send OTP
+                        </button>
+                    )}
+
                     <button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"

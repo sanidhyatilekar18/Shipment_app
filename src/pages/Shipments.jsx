@@ -7,34 +7,34 @@ import { Link } from 'react-router-dom'
 
 
 function Shipments() {
-    const [shipments, setShipments] = useState([]);
-    const { currentUser } = useAuth();
-    const [loading, setLoading] = useState(true);
-useEffect(() => {
+  const [shipments, setShipments] = useState([]);
+  const { currentUser } = useAuth();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
     const fetchShipments = async () => {
-        try {
-            const q = query(
-                collection(db, 'shipments'),
-                where('userId', '==', currentUser.uid),
-                orderBy('createdAt', 'desc'));
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setShipments(data);
-        } catch (error) {
-            console.error('Error fetching shipments:', error);
-        } finally {
-            setLoading(false);
-        }
+      try {
+        const q = query(
+          collection(db, 'shipments'),
+          where('userId', '==', currentUser.uid),
+          orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setShipments(data);
+      } catch (error) {
+        console.error('Error fetching shipments:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchShipments();
-}, [currentUser]);
-     if (loading) return <p className="text-center mt-10">Loading shipments...</p>;
-    return (
-        <div className="p-6 max-w-4xl mx-auto">
+  }, [currentUser]);
+  if (loading) return <p className="text-center mt-10">Loading shipments...</p>;
+  return (
+    <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">My Shipments</h2>
 
       {shipments.length === 0 ? (
@@ -50,6 +50,7 @@ useEffect(() => {
                 <th className="border p-2">Address</th>
                 <th className="border p-2">Status</th>
                 <th className="border p-2">Date</th>
+                <th className="border p-2">Track</th>
               </tr>
             </thead>
             <tbody>
@@ -63,6 +64,11 @@ useEffect(() => {
                   <td className="border p-2">
                     {shipment.createdAt?.toDate().toLocaleString() || "—"}
                   </td>
+                  <td className="border p-2 text-center">
+                    <Link to={`/shipment/${shipment.id}`}>
+                      <button className="text-blue-600 underline">Track</button>
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -70,7 +76,8 @@ useEffect(() => {
         </div>
       )}
     </div>
-    )
+  )
 }
 
 export default Shipments
+
