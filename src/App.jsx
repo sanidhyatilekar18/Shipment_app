@@ -12,6 +12,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
 import TrackShipment from './pages/TrackShipment';
 import { ToastContainer } from 'react-toastify';
+import Navbar from './components/Navbar';
 
 
 
@@ -22,6 +23,8 @@ function App() {
       <BrowserRouter>
 
         <AuthProvider>
+          <Navbar />
+          
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
