@@ -11,7 +11,7 @@ function Login() {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       console.alert(error);
     }
@@ -20,7 +20,7 @@ function Login() {
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }

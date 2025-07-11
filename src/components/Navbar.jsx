@@ -16,7 +16,7 @@ function Navbar() {
     try {
       await signOut(auth);
       toast.success('Logged out successfully');
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
       toast.error('Logout failed');
@@ -28,7 +28,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-blue-600 text-white shadow-md relative z-50">
+    <nav className="bg-blue-600 text-white shadow-lg fixed  min-w-full z-50">
       <div className="max-w-7xl mx-auto px-2 py-3 flex items-center justify-between">
 
         <div className="flex items-center space-x-4">
@@ -37,15 +37,15 @@ function Navbar() {
           </button>
           <Link to="/" className="flex items-center space-x-2 text-2xl font-bold">
             <img src="/ogo.png" alt="Logo" className="h-14 w-16" />
-            <span className='font-bold text-2xl'>Shipster</span>
+            <span className='font-bold text-4xl'>Shipster</span>
           </Link>
         </div>
 
         
         <div className="hidden md:flex items-center space-x-6 ">
-          <Link to="/" className="text-xl font-semibold">Dashboard</Link>
-          <Link to="/create-shipment" className="text-xl font-semibold">Create Shipment</Link>
-          <Link to="/shipments" className="text-xl font-semibold">My Shipments</Link>
+          <Link to="/" className="text-xl font-semibold transition delay-50 duration-300 ease-out hover:-translate-y-1 hover:scale-120">Home</Link>
+          <Link to="/create-shipment" className="text-xl font-semibold transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-120">Create Shipment</Link>
+          <Link to="/shipments" className="text-xl font-semibold transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-120">My Shipments</Link>
 
           
           

@@ -79,7 +79,7 @@ function TrackShipment() {
       </div>
 
       <div className="text-center mt-6">
-        <Link to="/">
+        <Link to="/dashboard">
           <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Back to Dashboard
           </button>

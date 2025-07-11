@@ -13,7 +13,7 @@ function Register() {
   const handleRegister = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       alert(error.message);
     }

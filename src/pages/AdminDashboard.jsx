@@ -42,7 +42,7 @@ function AdminDashboard() {
       });
 
       toast.success('Status updated successfully');
-      fetchShipments(); // refresh data
+      fetchShipments(); 
     } catch (error) {
       toast.error('Error updating status');
       console.error('Error updating status:', error);
