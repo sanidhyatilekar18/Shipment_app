@@ -87,6 +87,8 @@ function Shipments() {
                 <th className="border p-2">Receiver</th>
                 <th className="border p-2">Package</th>
                 <th className="border p-2">Address</th>
+                <th className="border p-2">Sender Phone</th>
+                <th className="border p-2">Receiver Phone</th>
                 <th className="border p-2">Status</th>
                 <th className="border p-2">Date</th>
                 <th className="border p-2">Actions</th>
@@ -100,6 +102,8 @@ function Shipments() {
                   <td className="border p-2">{shipment.receiver}</td>
                   <td className="border p-2">{shipment.packageSize}</td>
                   <td className="border p-2">{shipment.address}</td>
+                  <td className="border p-2">{shipment.senderPhone}</td>
+                  <td className="border p-2">{shipment.receiverPhone}</td>
                   <td className="border p-2">{shipment.status}</td>
                   <td className="border p-2">
                     {shipment.createdAt?.toDate().toLocaleString() || "—"}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,7 +13,8 @@ function CreateShipment() {
     const [receiver, setReceiver] = useState('');
     const [packageSize, setPackageSize] = useState('');
     const [address, setAddress] = useState('');
-    const [phone, setPhone] = useState('');
+    const [senderPhone, setSenderPhone] = useState('');
+    const [receiverPhone, setReceiverPhone] = useState('');
     const [error, setError] = useState('');
     const { currentUser } = useAuth();
     const [otp, setOtp] = useState('');
@@ -35,7 +36,7 @@ function CreateShipment() {
             .then(() => {
                 toast.success('OTP sent to your email');
                 setOtpSent(true);
-                            setVerifying(true);
+                setVerifying(true);
             })
             .catch((error) => {
                 console.error('Failed to send OTP:', error);
@@ -46,25 +47,42 @@ function CreateShipment() {
         e.preventDefault();
         setError('');
 
-        if (!sender || !receiver || !packageSize || !address || !phone) {
+        if (!sender || !receiver || !packageSize || !address || !senderPhone || !receiverPhone) {
             setError('Please fill in all fields');
             return;
         }
 
-       
+
+        const phoneRegex = /^\+?[0-9]{10,15}$/;
+
+
+        if (!phoneRegex.test(senderPhone)) {
+            setError('Sender phone number must be 10 digits and start with 6-9.');
+            return;
+        }
+
+        if (!phoneRegex.test(receiverPhone)) {
+            setError('Receiver phone number must be 10 digits and start with 6-9.');
+            return;
+        }
+
         if (otp !== generatedOtp) {
             setError('Invalid OTP. Please check your email and try again.');
             return;
         }
         try {
+            const estimatedDelivery = new Date();
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 3); 
             await addDoc(collection(db, 'shipments'), {
                 sender,
                 receiver,
                 packageSize,
                 address,
-                phone,
+                senderPhone,
+                receiverPhone,
                 status: 'Pending',
                 createdAt: serverTimestamp(),
+                estimatedDelivery,
                 userId: currentUser.uid,
             });
 
@@ -73,8 +91,8 @@ function CreateShipment() {
             setReceiver('');
             setPackageSize('');
             setAddress('');
-            setPhone('');
-
+            setSenderPhone('');
+            setReceiverPhone('');
 
             navigate('/shipments');
         } catch (error) {
@@ -126,10 +144,17 @@ function CreateShipment() {
                     />
                     <input
                         type="text"
-                        placeholder="Phone Number (Optional)"
+                        placeholder="Phone Number "
                         className="w-full p-2 border rounded"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        value={senderPhone}
+                        onChange={(e) => setSenderPhone(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Receiver Phone Number"
+                        className="w-full p-2 border rounded"
+                        value={receiverPhone}
+                        onChange={(e) => setReceiverPhone(e.target.value)}
                     />
                     {verifying && (
                         <input
