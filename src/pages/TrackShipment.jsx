@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 function TrackShipment() {
-
-    const { id } = useParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [shipment, setShipment] = useState(null);
   const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchShipment = async () => {
       try {
         const docRef = doc(db, 'shipments', id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setShipment({ id: docSnap.id, ...docSnap.data() });
+          const data = docSnap.data();
+          if (data.status === 'Cancled') {
+            await deleteDoc(docRef);
+            navigate('/'); // Redirect to home after deletion
+            return;
+          }
+          setShipment({ id: docSnap.id, ...data });
         } else {
           setShipment(null);
         }
@@ -28,27 +34,26 @@ function TrackShipment() {
     };
 
     fetchShipment();
-  }, [id]);
+  }, [id, navigate]);
 
   if (loading) return <p className="text-center mt-10">Loading shipment details...</p>;
-
   if (!shipment) return <p className="text-center mt-10 text-red-500">Shipment not found.</p>;
-   const statusOrder = ['Pending', 'In Transit', 'Delivered'];
-  const currentStep = statusOrder.indexOf(shipment.status);
-    const estimatedDelivery = shipment.createdAt?.toDate();
-  if (estimatedDelivery) {
-    estimatedDelivery.setDate(estimatedDelivery.getDate() + 3); 
-  }
-  return (
-      <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow mt-8">
-      <h2 className="text-2xl font-bold mb-4 text-center">Shipment Details</h2>
 
-     
+  const statusOrder = ['Pending', 'In Transit', 'Delivered'];
+  const currentStep = statusOrder.indexOf(shipment.status);
+  const estimatedDelivery = shipment.createdAt?.toDate();
+  if (estimatedDelivery) {
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 3);
+  }
+
+  return (
+    <div className="max-w-screen h-screen p-6  rounded shadow pt-30 pl-12">
+      <h2 className="text-4xl font-bold mb-14 text-start mt-2">Shipment Details</h2>
       <div className="flex justify-between mb-6">
         {statusOrder.map((step, idx) => (
           <div key={step} className="flex flex-col items-center w-1/3">
             <div
-              className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold 
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold 
                 ${idx <= currentStep ? 'bg-green-500' : 'bg-gray-300'}
               `}
             >
@@ -61,9 +66,9 @@ function TrackShipment() {
         ))}
       </div>
 
-      <p className="text-lg font-medium mb-4">
+      <p className="text-xl font-bold mb-4 pt-4">
         Estimated Delivery:{' '}
-        <span className="text-blue-600">
+        <span className="text-blue-600 font-semibold">
           {estimatedDelivery?.toLocaleString() || 'N/A'}
         </span>
       </p>

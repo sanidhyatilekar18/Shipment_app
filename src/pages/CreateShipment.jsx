@@ -104,29 +104,31 @@ function CreateShipment() {
 
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-            <div className="w-full max-w-lg bg-white p-8 rounded shadow">
-                <h2 className="text-2xl font-bold mb-6 text-center">Create Shipment</h2>
+        <div className="flex flex-col min-h-screen  px-4 pt-18 ml-4">
+
+               <h2 className="text-4xl w-full font-bold mb-6 text-start mt-8">Create Shipment</h2>
+            <div className="w-full max-w-lg flex flex-col bg-white p-8 rounded shadow-lg mx-auto my-8">
+             
 
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 flex flex-col items-center">
                     <input
                         type="text"
                         placeholder="Sender Name"
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border-2 rounded"
                         value={sender}
                         onChange={(e) => setSender(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Receiver Name"
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border-2 rounded"
                         value={receiver}
                         onChange={(e) => setReceiver(e.target.value)}
                     />
                     <select
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border-2 rounded"
                         value={packageSize}
                         onChange={(e) => setPackageSize(e.target.value)}
                     >
@@ -138,21 +140,21 @@ function CreateShipment() {
                     <input
                         type="text"
                         placeholder="Delivery Address"
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border-2 rounded"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Phone Number "
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border-2 rounded"
                         value={senderPhone}
                         onChange={(e) => setSenderPhone(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="Receiver Phone Number"
-                        className="w-full p-2 border rounded"
+                        className="w-full p-2 border-2 rounded"
                         value={receiverPhone}
                         onChange={(e) => setReceiverPhone(e.target.value)}
                     />
@@ -160,7 +162,7 @@ function CreateShipment() {
                         <input
                             type="text"
                             placeholder="Enter OTP"
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2 border-2 rounded"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
                         />
@@ -169,7 +171,7 @@ function CreateShipment() {
                         <button
                             type="button"
                             onClick={generateAndSendOtp}
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                            className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700"
                         >
                             Send OTP
                         </button>
@@ -177,7 +179,7 @@ function CreateShipment() {
 
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                        className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700"
                     >
                         Submit Shipment
                     </button>

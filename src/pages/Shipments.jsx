@@ -73,61 +73,81 @@ function Shipments() {
   if (loading) return <p className="text-center mt-10">Loading shipments...</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">My Shipments</h2>
+    <div className="p-6 max-w-screen mx-auto flex flex-col ">
+      <h2 className="text-4xl font-bold mb-4 mt-24 text-start">My Shipments</h2>
+      <div className="p-6 max-w-screen mx-auto flex flex-col items-center">
+        {loading ? (
+          <p className="text-center">Loading...</p>
+        ) : shipments.length === 0 ? (
+          <p className="text-center">
+            No shipments found. <Link className="text-blue-600 underline" to="/create-shipment">Create one</Link>.
+          </p>
+        ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-12 w-[350px] sm:w-[750px] lg:w-350 mt-6 justify-center">
+          {shipments.map((shipment) => (
+            <div key={shipment.id} className="bg-white shadow-md rounded-xl p-5 border border-gray-200">
+              <div className="mb-2">
+                <p className="text-sm text-gray-500 font-semibold">Sender:</p>
+                <p className="text-lg">{shipment.sender}</p>
+              </div>
 
-      {shipments.length === 0 ? (
-        <p>No shipments found. <Link className="text-blue-600" to="/create-shipment">Create one</Link>.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-2">Sender</th>
-                <th className="border p-2">Receiver</th>
-                <th className="border p-2">Package</th>
-                <th className="border p-2">Address</th>
-                <th className="border p-2">Sender Phone</th>
-                <th className="border p-2">Receiver Phone</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Date</th>
-                <th className="border p-2">Actions</th>
-                <th className="border p-2">Cancel</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shipments.map((shipment) => (
-                <tr key={shipment.id}>
-                  <td className="border p-2">{shipment.sender}</td>
-                  <td className="border p-2">{shipment.receiver}</td>
-                  <td className="border p-2">{shipment.packageSize}</td>
-                  <td className="border p-2">{shipment.address}</td>
-                  <td className="border p-2">{shipment.senderPhone}</td>
-                  <td className="border p-2">{shipment.receiverPhone}</td>
-                  <td className="border p-2">{shipment.status}</td>
-                  <td className="border p-2">
-                    {shipment.createdAt?.toDate().toLocaleString() || "—"}
-                  </td>
-                  <td className="border p-2 flex flex-col gap-2">
-                    <Link to={`/shipment/${shipment.id}`}>
-                      <button className="text-blue-600 underline">Track</button>
-                    </Link>
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => handleCancel(shipment)}
-                      className="text-red-600 underline disabled:text-gray-400"
-                    >
-                      Cancel
-                    </button>
-                  </td>
+              <div className="mb-2">
+                <p className="text-sm text-gray-500 font-semibold">Receiver:</p>
+                <p className="text-lg">{shipment.receiver}</p>
+              </div>
 
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              <div className="mb-2">
+                <p className="text-sm text-gray-500 font-semibold">Package:</p>
+                <p className="text-lg">{shipment.packageSize}</p>
+              </div>
+
+              <div className="mb-2">
+                <p className="text-sm text-gray-500 font-semibold">Address:</p>
+                <p className="text-lg break-words">{shipment.address}</p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-2">
+                <div>
+                  <p className="text-sm text-gray-500 font-semibold">Sender Phone:</p>
+                  <p className="text-md">{shipment.senderPhone}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 font-semibold">Receiver Phone:</p>
+                  <p className="text-md">{shipment.receiverPhone}</p>
+                </div>
+              </div>
+
+              <div className="mb-2">
+                <p className="text-sm text-gray-500 font-semibold">Status:</p>
+                <p className={`text-md font-semibold ${shipment.status === 'Delivered' ? 'text-green-600' : 'text-yellow-600'}`}>
+                  {shipment.status}
+                </p>
+              </div>
+
+              <div className="mb-4">
+                <p className="text-sm text-gray-500 font-semibold">Created At:</p>
+                <p className="text-md">{shipment.createdAt?.toDate().toLocaleString() || "—"}</p>
+              </div>
+
+              <div className="flex justify-between items-center gap-4">
+                <Link to={`/shipment/${shipment.id}`}>
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Track</button>
+                </Link>
+
+                <button
+                  onClick={() => handleCancel(shipment)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 disabled:bg-gray-400"
+                  disabled={shipment.status === "Delivered"}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
+
+    </div>
     </div>
   );
 }

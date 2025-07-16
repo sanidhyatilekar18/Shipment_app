@@ -29,7 +29,7 @@ function AdminDashboard() {
 
         const deletions = snapshot.docs.filter(docSnap => {
           const data = docSnap.data();
-          const estDate = data.estimatedDelivery?.toDate(); // Check if exists
+          const estDate = data.estimatedDelivery?.toDate(); 
           return data.status === 'Delivered' || (estDate && estDate < now);
         });
 
@@ -151,12 +151,12 @@ function AdminDashboard() {
   if (loading) return <p className="text-center mt-10">Loading shipments...</p>;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-screen mx-auto pt-30 ml-4">
       <ToastContainer />
-      <h2 className="text-3xl font-bold mb-6 text-center">Admin Panel - All Shipments</h2>
+      <h2 className="text-4xl font-bold mb-6 text-start w-full">Admin Panel - All Shipments</h2>
 
-      <div className="mb-4">
-        <label className="mr-2 font-semibold">Filter by Status:</label>
+      <div className="mb-4 pt-6 pb-6 flex flex-wrap md:flex-row flex-row items-center text-center gap-4">
+          <label className=" font-semibold text-xl ">Filter by Status:</label>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -167,127 +167,151 @@ function AdminDashboard() {
           <option value="In Transit">In Transit</option>
           <option value="Delivered">Delivered</option>
         </select>
-        <div className="flex gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium">Start Date</label>
+      
+        
+          
+            <label className="block text-xl font-semibold ">Start Date</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="border rounded p-1"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">End Date</label>
+          
+          
+            <label className="block text-xl font-semibold ">End Date</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="border rounded p-1"
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Search (Name or Phone)</label>
+        
+        
+            <label className="block text-xl font-semibold ">Search (Name or Phone)</label>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
               placeholder="Search by sender, receiver, or phone"
-              className="w-full p-2 border rounded"
+              className="  py-1.5 border rounded"
             />
-          </div>
-          <div className="flex justify-end mb-4">
+      
+        
             <button
               onClick={exportToCSV}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+              className="bg-green-600 hover:bg-green-700 text-white h-10 w-40 rounded  px-4 flex items-center justify-center"
             >
               Export CSV
             </button>
-          </div>
-        </div>
+        
+      
 
       </div>
 
       {currentShipments.length === 0 ? (
-        <p className="text-center">No shipments found.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border p-2">Sender</th>
-                <th className="border p-2">Receiver</th>
-                <th className="border p-2">Package</th>
-                <th className="border p-2">Address</th>
-                <th className="border p-2">Sender Phone</th>
-                <th className="border p-2">Receiver Phone</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Date</th>
-                <th className="border p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentShipments.map(shipment => (
-                <tr key={shipment.id}>
-                  <td className="border p-2">{shipment.sender}</td>
-                  <td className="border p-2">{shipment.receiver}</td>
-                  <td className="border p-2">{shipment.packageSize}</td>
-                  <td className="border p-2">{shipment.address}</td>
-                  <td className="border p-2">{shipment.senderPhone}</td>
-                  <td className="border p-2">{shipment.receiverPhone}</td>
-                  <td className="border p-2">
-                    <select
-                      value={updatedStatuses[shipment.id] || shipment.status}
-                      onChange={(e) =>
-                        setUpdatedStatuses(prev => ({
-                          ...prev,
-                          [shipment.id]: e.target.value
-                        }))
-                      }
-                      className="border rounded p-1"
-                    >
-                      <option value="Pending">Pending</option>
-                      <option value="In Transit">In Transit</option>
-                      <option value="Delivered">Delivered</option>
-                    </select>
-                  </td>
-                  <td className="border p-2">{shipment.createdAt?.toDate().toLocaleString()}</td>
-                  <td className="border p-2">
-                    <button
-                      onClick={() => handleStatusUpdate(shipment.id)}
-                      disabled={
-                        !updatedStatuses[shipment.id] ||
-                        updatedStatuses[shipment.id] === shipment.status
-                      }
-                      className={`px-2 py-1 rounded text-white ${updatedStatuses[shipment.id] !== shipment.status
-                        ? 'bg-blue-500 hover:bg-blue-600'
-                        : 'bg-gray-400 cursor-not-allowed'
-                        }`}
-                    >
-                      Update
-                    </button>
-                  </td>
-                </tr>
-              ))}
+  <p className="text-center">No shipments found.</p>
+) : (
+  <>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {currentShipments.map((shipment) => (
+        <div
+          key={shipment.id}
+          className="bg-white border border-gray-200 shadow-md rounded-xl p-5 flex flex-col justify-between"
+        >
+          <div>
+            <div className="mb-2">
+              <p className="text-sm text-gray-500 font-semibold">Sender:</p>
+              <p className="text-lg">{shipment.sender}</p>
+            </div>
 
-            </tbody>
-          </table>
-          <div className="flex justify-end mt-4 gap-2">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
-              <button
-                key={pageNum}
-                onClick={() => setCurrentPage(pageNum)}
-                className={`px-3 py-1 rounded border ${pageNum === currentPage
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-black'
-                  }`}
+            <div className="mb-2">
+              <p className="text-sm text-gray-500 font-semibold">Receiver:</p>
+              <p className="text-lg">{shipment.receiver}</p>
+            </div>
+
+            <div className="mb-2">
+              <p className="text-sm text-gray-500 font-semibold">Package:</p>
+              <p className="text-lg">{shipment.packageSize}</p>
+            </div>
+
+            <div className="mb-2">
+              <p className="text-sm text-gray-500 font-semibold">Address:</p>
+              <p className="text-md break-words">{shipment.address}</p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-2">
+              <div>
+                <p className="text-sm text-gray-500 font-semibold">Sender Phone:</p>
+                <p className="text-md">{shipment.senderPhone}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 font-semibold">Receiver Phone:</p>
+                <p className="text-md">{shipment.receiverPhone}</p>
+              </div>
+            </div>
+
+            <div className="mb-2">
+              <p className="text-sm text-gray-500 font-semibold">Status:</p>
+              <select
+                value={updatedStatuses[shipment.id] || shipment.status}
+                onChange={(e) =>
+                  setUpdatedStatuses((prev) => ({
+                    ...prev,
+                    [shipment.id]: e.target.value,
+                  }))
+                }
+                className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
-                {pageNum}
-              </button>
-            ))}
+                <option value="Pending">Pending</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Delivered">Delivered</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <p className="text-sm text-gray-500 font-semibold">Created At:</p>
+              <p className="text-md">{shipment.createdAt?.toDate().toLocaleString()}</p>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <button
+              onClick={() => handleStatusUpdate(shipment.id)}
+              disabled={
+                !updatedStatuses[shipment.id] ||
+                updatedStatuses[shipment.id] === shipment.status
+              }
+              className={`w-full py-2 rounded text-white transition font-medium ${
+                updatedStatuses[shipment.id] !== shipment.status
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-gray-400 cursor-not-allowed'
+              }`}
+            >
+              Update
+            </button>
           </div>
         </div>
-      )}
+      ))}
+    </div>
+
+    <div className="flex justify-end mt-4 gap-2">
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+        <button
+          key={pageNum}
+          onClick={() => setCurrentPage(pageNum)}
+          className={`px-3 py-1 rounded border ${pageNum === currentPage
+            ? 'bg-blue-600 text-white'
+            : 'bg-white text-black'
+            }`}
+        >
+          {pageNum}
+        </button>
+      ))}
+    </div>
+  </>
+)}
+
     </div>
   );
 }
