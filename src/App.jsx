@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
 import CreateShipment from './pages/CreateShipment';
-import Shipments from './pages/shipments';
+import Shipments from './pages/Shipments';
 import AdminDashboard from './pages/AdminDashboard';
 import TrackShipment from './pages/TrackShipment';
 import { ToastContainer } from 'react-toastify';
