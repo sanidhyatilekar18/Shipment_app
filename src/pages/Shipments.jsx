@@ -74,7 +74,7 @@ function Shipments() {
 
   return (
     <div className="p-6 max-w-screen mx-auto flex flex-col ">
-      <h2 className="text-4xl font-bold mb-4 mt-24 text-start">My Shipments</h2>
+      <h2 className="text-4xl font-bold mb-4 mt-20 text-start">My Shipments</h2>
       <div className="p-6 max-w-screen mx-auto flex flex-col items-center">
         {loading ? (
           <p className="text-center">Loading...</p>

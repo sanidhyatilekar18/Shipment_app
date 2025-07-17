@@ -63,24 +63,24 @@ function Navbar() {
           {auth.currentUser ? (
             <button
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-md"
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-md cursor-pointer" 
             >
               Logout
             </button>
           ) : (
             <Link
               to="/login"
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md "
             >
               Login
             </Link>
           )}
           <div className="relative mx-3 space-x-3">
-            <button onClick={handleUserProfile} className="hover:text-gray-200">
+            <button onClick={handleUserProfile} className="hover:text-gray-200 cursor-pointer">
               <FontAwesomeIcon icon={faUser}  size='xl'/>
             </button>
             {showUserProfile && (
-              <div className="absolute right-0 mt-2">
+              <div className="absolute right-0 mt-2 cursor-pointer">
                 <UserProfile  />
               </div>
             )}

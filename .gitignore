@@ -11,6 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+constants/admins.js
+
+
 
 # Editor directories and files
 .vscode/*

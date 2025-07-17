@@ -28,17 +28,19 @@ function UserProfile() {
 
       <div className="flex flex-col items-center space-y-4">
     
-        {currentUser.photoURL ? (
-          <img
-            src={currentUser.photoURL}
-            alt="Profile"
-            className="w-24 h-24 rounded-full"
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-2xl text-black">
-            {currentUser.email.charAt(0).toUpperCase()}
-          </div>
-        )}
+       {currentUser ? (
+  currentUser.photoURL ? (
+    <img
+      src={currentUser.photoURL}
+      alt="Profile"
+      className="w-24 h-24 rounded-full"
+    />
+  ) : (
+    <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-2xl text-black">
+      {currentUser.email?.charAt(0)?.toUpperCase() ?? "?"}
+    </div>
+  )
+) : null}
 
         <div className="text-center">
           <p className="text-lg font-semibold">{currentUser.displayName || 'User'}</p>
